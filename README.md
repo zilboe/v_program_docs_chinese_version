@@ -567,13 +567,13 @@ V 中所有运算符两侧的值必须具有相同类型的规则有一个例外
 
 ```v nofmt
 u := u16(12)
-v := 13 + u    // v is of type `u16` - no promotion
+v := 13 + u    // v 的类型是 `u16` - 无提升
 x := f32(45.6)
-y := x + 3.14  // y is of type `f32` - no promotion
-a := 75        // a is of type `int` - default for int literal
-b := 14.7      // b is of type `f64` - default for float literal
-c := u + a     // c is of type `int` - automatic promotion of `u`'s value
-d := b + x     // d is of type `f64` - automatic promotion of `x`'s value
+y := x + 3.14  // y 的类型是 `f32` - 无提升
+a := 75        // a 的类型是 `int` - 整数字面量的默认类型
+b := 14.7      // b 的类型是 `f64` - 浮点数字面量的默认类型
+c := u + a     // c 的类型是 `int` - `u` 的值自动提升
+d := b + x     // d 的类型是 `f64` - `x` 的值自动提升
 ```
 
 ### 字符串
@@ -744,19 +744,19 @@ println('Hello, ${name}!') // Hello, Bob!
 
 ```v
 x := 123.4567
-println('[${x:.2}]') // round to two decimal places => [123.46]
-println('[${x:10}]') // right-align with spaces on the left => [   123.457]
-println('[${int(x):-10}]') // left-align with spaces on the right => [123       ]
-println('[${int(x):010}]') // pad with zeros on the left => [0000000123]
-println('[${int(x):b}]') // output as binary => [1111011]
-println('[${int(x):o}]') // output as octal => [173]
-println('[${int(x):X}]') // output as uppercase hex => [7B]
+println('[${x:.2}]') // 四舍五入到两位小数 => [123.46]
+println('[${x:10}]') // 右对齐，左侧填充空格 => [   123.457]
+println('[${int(x):-10}]') // 左对齐，右侧填充空格 => [123       ]
+println('[${int(x):010}]') // 左侧用零填充 => [0000000123]
+println('[${int(x):b}]') // 以二进制输出 => [1111011]
+println('[${int(x):o}]') // 以八进制输出 => [173]
+println('[${int(x):X}]') // 以大写十六进制输出 => [7B]
 
-println('[${10.0000:.2}]') // remove insignificant 0s at the end => [10]
-println('[${10.0000:.2f}]') // do show the 0s at the end, even though they do not change the number => [10.00]
+println('[${10.0000:.2}]') // 移除末尾无效的0 => [10]
+println('[${10.0000:.2f}]') // 显示末尾的0，即使它们不改变数值 => [10.00]
 ```
 
-V also has `r` and `R` switches, which will repeat the string the specified amount of times.
+V语言还提供了 r 和 R 开关选项，用于将字符串重复指定的次数。
 
 ```v
 println('[${'abc':3r}]') // [abcabcabc]
@@ -1299,21 +1299,19 @@ println(array_2) // `[0, 1, 3, 5, 4]`
 ```v
 mut a := [0, 1, 2, 3, 4, 5]
 
-// Create a slice, that reuses the *same memory* as the parent array
-// initially, without doing a new allocation:
-mut b := unsafe { a[2..4] } // the contents of `b`, reuses the memory, used by the contents of `a`.
+// 创建一个切片，最初重用与父数组*相同的内存*，而不进行新的分配：
+mut b := unsafe { a[2..4] } // `b` 的内容重用 `a` 的内容使用的内存。
 
-b[0] = 7 // Note that `b[0]` and `a[2]` refer to *the same element* in memory.
-println(a) // `[0, 1, 7, 3, 4, 5]` - changing `b[0]` above, changed `a[2]` too.
+b[0] = 7 // 注意 `b[0]` 和 `a[2]` 指向内存中的*同一个元素*。
+println(a) // `[0, 1, 7, 3, 4, 5]` - 上面更改 `b[0]` 也更改了 `a[2]`。
 
-// the content of `b` will get reallocated, to have room for the `9` element:
+// `b` 的内容将被重新分配，以便为 `9` 元素腾出空间：
 b << 9
-// The content of `b`, is now reallocated, and fully independent from the content of `a`.
+// `b` 的内容现在已重新分配，并且完全独立于 `a` 的内容。
 
-println(a) // `[0, 1, 7, 3, 4, 5]` - no change, since the content of `b` was reallocated,
-// to a larger block, before the appending.
+println(a) // `[0, 1, 7, 3, 4, 5]` - 没有变化，因为在追加之前，`b` 的内容被重新分配到一个更大的块。
 
-println(b) // `[7, 3, 9]` - the contents of `b`, after the reallocation, and appending of the `9`.
+println(b) // `[7, 3, 9]` - 重新分配并追加 `9` 后，`b` 的内容。
 ```
 
 追加到父数组可能会也可能不会使其独立于其子切片。
