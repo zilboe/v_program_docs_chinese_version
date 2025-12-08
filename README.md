@@ -2398,7 +2398,7 @@ fn (mut app App) auth_with_user_middleware() (bool, string) {
 }
 ```
 
-#### defer in loop scopes:
+#### 循环作用域中的 defer：
 Defer 也可以在循环内使用，延迟语句将在每次
 迭代时执行一次。您还可以在同一作用域中有多个 defer 语句，在这种情况下，它们
 将按照在源代码中出现的相反顺序执行：
@@ -2418,21 +2418,21 @@ fn main() {
 
 该示例将打印以下内容：
 ```txt
-循环开始。
-循环迭代：1
-延迟执行 1. Defer 3。
-延迟执行 1. Defer 2。
-延迟执行 1. Defer 1。
-循环迭代：2
-延迟执行 2. Defer 3。
-延迟执行 2. Defer 2。
-延迟执行 2. Defer 1。
-循环迭代：3
-延迟执行 3. Defer 3。
-延迟执行 3. Defer 2。
-延迟执行 3. Defer 1。
-循环完成。
-程序结束。
+Loop start.
+Loop iteration: 1
+Deferred execution for 1. Defer 3.
+Deferred execution for 1. Defer 2.
+Deferred execution for 1. Defer 1.
+Loop iteration: 2
+Deferred execution for 2. Defer 3.
+Deferred execution for 2. Defer 2.
+Deferred execution for 2. Defer 1.
+Loop iteration: 3
+Deferred execution for 3. Defer 3.
+Deferred execution for 3. Defer 2.
+Deferred execution for 3. Defer 1.
+Loop done.
+Program finish.
 ```
 
 #### defer(fn) {}
@@ -3089,19 +3089,19 @@ fn run(value int, op fn (int) int) int {
 }
 
 fn main() {
-	// Functions can be passed to other functions
+	// 函数可以传递给其他函数
 	println(run(5, sqr)) // "25"
-	// Anonymous functions can be declared inside other functions:
+	// 匿名函数也可以在其他函数内声明：
 	double_fn := fn (n int) int {
 		return n + n
 	}
 	println(run(5, double_fn)) // "10"
-	// Functions can be passed around without assigning them to variables:
+	// 函数无需先赋值给变量也能直接传递：
 	res := run(5, fn (n int) int {
 		return n + n
 	})
 	println(res) // "10"
-	// You can even have an array/map of functions:
+	// 甚至可以拥有函数数组或函数 map：
 	fns := [sqr, cube]
 	println(fns[0](10)) // "100"
 	fns_map := {
@@ -3118,20 +3118,20 @@ V 中的 Lambda 表达式是小的匿名函数，使用
 `|variables| expression` 语法定义。注意：此语法仅在调用高阶
 函数时有效。
 
-Here are some examples:
+下面是一些示例：
 ```v
 mut a := [1, 2, 3]
-a.sort(|x, y| x > y) // sorts the array, defining the comparator with a lambda expression
-println(a.map(|x| x * 10)) // prints [30, 20, 10]
+a.sort(|x, y| x > y) // 使用 lambda 表达式定义比较器来排序数组
+println(a.map(|x| x * 10)) // 打印 [30, 20, 10]
 ```
 
 ```v
-// Lambda function can be used as callback
+// Lambda 函数可用作回调
 fn f(cb fn (a int) int) int {
 	return cb(10)
 }
 
-println(f(|x| x + 4)) // prints 14
+println(f(|x| x + 4)) // 打印 14
 ```
 
 ### 闭包
