@@ -1319,15 +1319,15 @@ println(b) // `[7, 3, 9]` - 重新分配并追加 `9` 后，`b` 的内容。
 
 ```v
 mut a := []int{len: 5, cap: 6, init: 2}
-mut b := unsafe { a[1..4] } // the contents of `b` uses part of the same memory, that is used by `a` too
+mut b := unsafe { a[1..4] } // `b` 的内容复用了 `a` 的一部分内存
 
 a << 3
-// still no reallocation of `a`, since `a.len` still fits in `a.cap`
-b[2] = 13 // `a[3]` is modified, through the slice `b`.
+// 这里仍不会重新分配 `a`，因为 `a.len` 仍在 `a.cap` 范围内
+b[2] = 13 // 通过切片 `b` 修改了 `a[3]`
 
 a << 4
-// the content of `a` has been reallocated now, and is independent from `b` (`cap` was exceeded by `len`)
-b[1] = 3 // no change in `a`
+// 此时 `a` 的内容已被重新分配，且与 `b` 独立（`len` 超过了 `cap`）
+b[1] = 3 // `a` 不会再变化
 
 println(a) // `[2, 2, 2, 13, 2, 3, 4]`
 println(b) // `[2, 3, 13]`
