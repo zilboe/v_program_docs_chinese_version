@@ -3304,7 +3304,7 @@ const red = Color{
 	g: 0
 	b: 0
 }
-// evaluate function call at compile time*
+// 在编译期求值函数调用*
 const blue = rgb(0, 0, 255)
 
 println(numbers)
@@ -3318,7 +3318,7 @@ println(blue)
 
 **Modules**
 
-Constants can be made public with `pub const`:
+常量可以用 `pub const` 公开：
 
 ```v oksyntax
 module mymodule
@@ -3348,10 +3348,9 @@ vfmt 会处理此规则，因此您可以在 `math` 模块内键入 `println(pi)
 vfmt 会自动将其更新为 `println(math.pi)`。
 
 <!--
-Many people prefer all caps consts: `TOP_CITIES`. This wouldn't work
-well in V, because consts are a lot more powerful than in other languages.
-They can represent complex structures, and this is used quite often since there
-are no globals:
+很多人喜欢使用全大写的常量名：`TOP_CITIES`。在 V 中不太合适，
+因为 V 的常量比其他语言更强大。它们可以表示复杂结构，而且由于没有
+全局变量，这种用法很常见：
 
 ```v oksyntax
 println('Top cities: ${top_cities.filter(.usa)}')
@@ -3363,20 +3362,20 @@ println('Top cities: ${top_cities.filter(.usa)}')
 一些函数是内置的，如 `println`。以下是完整列表：
 
 ```v ignore
-fn print(s string) // prints anything on stdout
-fn println(s string) // prints anything and a newline on stdout
+fn print(s string) // 在 stdout 上打印任意内容
+fn println(s string) // 在 stdout 上打印任意内容并换行
 
-fn eprint(s string) // same as print(), but uses stderr
-fn eprintln(s string) // same as println(), but uses stderr
+fn eprint(s string) // 与 print() 相同，但使用 stderr
+fn eprintln(s string) // 与 println() 相同，但使用 stderr
 
-fn exit(code int) // terminates the program with a custom error code
-fn panic(s string) // prints a message and backtraces on stderr, and terminates the program with error code 1
-fn print_backtrace() // prints backtraces on stderr
+fn exit(code int) // 使用自定义错误码终止程序
+fn panic(s string) // 在 stderr 上打印消息和回溯，并以错误码 1 终止程序
+fn print_backtrace() // 在 stderr 上打印回溯
 ```
 
 > [!NOTE]
-> Although the `print` functions take a string, V accepts other printable types too.
-> See below for details.
+> 尽管 `print` 系列函数接受字符串，V 也支持其他可打印类型。
+> 详情见下文。
 
 还有一个名为 [`dump`](#dumping-expressions-at-runtime) 的特殊内置函数。
 
@@ -3487,7 +3486,7 @@ vim mymodule/myfile.v
 // myfile.v
 module mymodule
 
-// To export a function we have to use `pub`
+// 要导出一个函数，需要使用 `pub`
 pub fn say_hi() {
 	println('hello from mymodule!')
 }
@@ -3557,7 +3556,7 @@ fn init() {
 
 ```v
 fn cleanup() {
-	// your deinitialisation code here ...
+	// 在这里编写你的反初始化代码 ...
 }
 ```
 
@@ -3580,13 +3579,13 @@ fn cleanup() {
 例如：
 ```v
 enum Color as u8 {
-	red   // the default start value is 0
-	green // the value is automatically incremented to 1
-	blue  // the final value is now 2
+	red   // 默认起始值为 0
+	green // 值会自动递增为 1
+	blue  // 最终值为 2
 }
 
 mut color := Color.red
-// V knows that `color` is a `Color`. No need to use `color = Color.green` here.
+// V 知道 `color` 的类型是 `Color`，这里无需写成 `color = Color.green`
 color = .green
 println(color) // "green"
 match color {
@@ -3827,7 +3826,7 @@ interface Foo {
 	write(string) string
 }
 
-// => the method signature of a type, implementing interface Foo should be:
+// => 实现接口 Foo 的类型，其方法签名应为：
 // `fn (s Type) write(a string) string`
 
 interface Bar {
@@ -3835,12 +3834,12 @@ mut:
 	write(string) string
 }
 
-// => the method signature of a type, implementing interface Bar should be:
+// => 实现接口 Bar 的类型，其方法签名应为：
 // `fn (mut s Type) write(a string) string`
 
 struct MyStruct {}
 
-// MyStruct implements the interface Foo, but *not* interface Bar
+// MyStruct 实现了接口 Foo，但 *没有* 实现接口 Bar
 fn (s MyStruct) write(a string) string {
 	return a
 }
@@ -3848,14 +3847,14 @@ fn (s MyStruct) write(a string) string {
 fn main() {
 	s1 := MyStruct{}
 	fn1(s1)
-	// fn2(s1) -> compile error, since MyStruct does not implement Bar
+	// fn2(s1) -> 编译错误，因为 MyStruct 未实现 Bar
 }
 
 fn fn1(s Foo) {
 	println(s.write('Foo'))
 }
 
-// fn fn2(s Bar) { // does not match
+// fn fn2(s Bar) { // 不匹配
 //      println(s.write('Foo'))
 // }
 ```
@@ -3891,12 +3890,12 @@ fn main() {
 > 在此示例中，动态转换将变量 `s` 转换为 `if` 语句内的指针：
 
 ```v oksyntax
-// interface-example.3 (continued from interface-example.1)
+// interface-example.3（承接 interface-example.1）
 interface Something {}
 
 fn announce(s Something) {
 	if s is Dog {
-		println('a ${s.breed} dog') // `s` is automatically cast to `Dog` (smart cast)
+		println('a ${s.breed} dog') // `s` 会被自动转换为 `Dog`（智能转换）
 	} else if s is Cat {
 		println('a cat speaks ${s.speak()}')
 	} else {
@@ -3922,12 +3921,12 @@ interface IBar {
 	bar()
 }
 
-// implements only IFoo
+// 仅实现 IFoo
 struct SFoo {}
 
 fn (sf SFoo) foo() {}
 
-// implements both IFoo and IBar
+// 同时实现 IFoo 和 IBar
 struct SFooBar {}
 
 fn (sfb SFooBar) foo() {}
@@ -3943,7 +3942,7 @@ fn main() {
 
 	for a in arr {
 		dump(a)
-		// 为了执行实现 IBar 的实例。
+		// 对实现了 IBar 的实例执行操作
 		if a is IBar {
 			a.bar()
 		}
@@ -4176,7 +4175,7 @@ fn land(w World) {
 }
 ```
 
-`match` must have a pattern for each variant or have an `else` branch.
+`match` 必须为每个变体提供分支，或包含 `else` 分支。
 
 ```v ignore
 struct Moon {}
@@ -4191,7 +4190,7 @@ fn (v Venus) sweat() {}
 
 fn pass_time(w World) {
     match w {
-        // using the shadowed match variable, in this case `w` (smart cast)
+        // 使用被遮蔽的 match 变量，此处是 `w`（智能转换）
         Moon { w.moon_walk() }
         Mars { w.shiver() }
         else {}
@@ -4290,8 +4289,7 @@ x := read() or {
 
 #### 返回多个值时的 Options/results
 
-函数只允许返回一个 `Option` 或 `Result`。它是
-possible to return multiple values and still signal an error.
+函数只允许返回一个 `Option` 或 `Result`。也可以返回多个值，同时传递错误信号。
 
 ```v
 fn multi_return(v int) !(int, int) {
@@ -4358,8 +4356,8 @@ fn do_something(s string) !string {
 	return error('invalid string')
 }
 
-a := do_something('foo') or { 'default' } // a will be 'foo'
-b := do_something('bar') or { 'default' } // b will be 'default'
+a := do_something('foo') or { 'default' } // a 将是 'foo'
+b := do_something('bar') or { 'default' } // b 将是 'default'
 println(a)
 println(b)
 ```
@@ -4623,8 +4621,8 @@ fn main() {
 您可以选择使用 `cap` 字段指定缓冲区长度：
 
 ```v
-ch := chan int{} // unbuffered - "synchronous"
-ch2 := chan f64{cap: 100} // buffered with a capacity of 100
+ch := chan int{} // 无缓冲 - “同步”
+ch2 := chan f64{cap: 100} // 有 100 容量的缓冲通道
 ```
 
 通道不必声明为 `mut`。缓冲区长度不是类型的一部分，而是
@@ -4714,7 +4712,7 @@ fn main() {
 	ch3 := chan f64{}
 	mut b := 0.0
 	c := 1.0
-	// ... setup spawn threads that will send on ch/ch2
+	// ... 设置并启动线程，它们会向 ch/ch2 发送数据
 	spawn fn (the_channel chan f64) {
 		time.sleep(5 * time.millisecond)
 		the_channel <- 1.0
@@ -4729,20 +4727,20 @@ fn main() {
 
 	select {
 		a := <-ch {
-			// 对 `a` 做一些事情
+			// 对 `a` 做一些处理
 			eprintln('> a: ${a}')
 		}
 		b = <-ch2 {
-			// 对预声明的变量 `b` 做一些事情
+			// 对预声明的变量 `b` 做一些处理
 			eprintln('> b: ${b}')
 		}
 		ch3 <- c {
-			// 如果 `c` 已发送，做一些事情
+			// 如果 `c` 已发送，做一些处理
 			time.sleep(5 * time.millisecond)
 			eprintln('> c: ${c} was send on channel ch3')
 		}
 		500 * time.millisecond {
-			// 如果在 0.5 秒内没有通道就绪，做一些事情
+			// 如果在 0.5 秒内没有通道就绪，做一些处理
 			eprintln('> more than 0.5s passed without a channel being ready')
 		}
 	}
@@ -4763,9 +4761,9 @@ if select {
         // ...
     }
 } {
-    // channel was open
+    // 通道打开
 } else {
-    // channel is closed
+    // 通道关闭
 }
 ```
 
@@ -5300,7 +5298,7 @@ mut:
 	r &MyStruct
 }
 
-// see discussion below
+// 详见下文讨论
 @[heap]
 struct MyStruct {
 	n int
@@ -5319,11 +5317,11 @@ fn (mut r RefStruct) g() {
 	s := MyStruct{
 		n: 7
 	}
-	r.f(&s) // reference to `s` inside `r` is passed back to `main() `
+r.f(&s) // `s` 的引用被传回 `main() `
 }
 
 fn (mut r RefStruct) f(s &MyStruct) {
-	r.r = s // would trigger error without `[heap]`
+r.r = s // 没有 `[heap]` 会触发错误
 }
 ```
 
@@ -5341,12 +5339,12 @@ fn (mut r RefStruct) f(s &MyStruct) {
 分配，并允许将对 `s` 的引用分配给
 `r.r` 字段。
 
-There is a pattern often seen in other programming languages:
+在其他编程语言中常见一种模式：
 
 ```v failcompile
 fn (mut a MyStruct) f() &MyStruct {
-	// do something with a
-	return &a // would return address of borrowed object
+	// 对 a 做一些处理
+	return &a // 这会返回被借用对象的地址
 }
 ```
 
@@ -5365,11 +5363,11 @@ mut:
 }
 
 fn (mut a MyStruct) f() {
-	// do something with `a`
+	// 对 `a` 做一些处理
 }
 
 fn (mut a MyStruct) g() {
-	// do something else with `a`
+	// 对 `a` 做其他处理
 }
 
 fn main() {
@@ -5377,7 +5375,7 @@ fn main() {
 	mut y := x
 	y.f()
 	y.g()
-	// instead of `mut y := x.f().g()
+	// 而不是写成 `mut y := x.f().g()
 }
 ```
 
