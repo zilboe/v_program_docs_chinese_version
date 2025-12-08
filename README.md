@@ -1462,30 +1462,30 @@ mm := map[string]int{}
 val := mm['bad_key'] or { panic('key not found') }
 ```
 
-You can also check, if a key is present, and get its value, if it was present, in one go:
+你也可以在一次操作中同时检查键是否存在，并在存在时获取其值：
 
 ```v
 m := {
 	'abc': 'def'
 }
 if v := m['abc'] {
-	println('the map value for that key is: ${v}')
+println('该键对应的 map 值是: ${v}')
 }
 ```
 
-The same option check applies to arrays:
+同样的 option 检查也适用于数组：
 
 ```v
 arr := [1, 2, 3]
 large_index := 999
 val := arr[large_index] or { panic('out of bounds') }
 println(val)
-// you can also do this, if you want to *propagate* the access error:
+// 如果你想 *向上抛出* 访问错误，也可以这样写：
 val2 := arr[333]!
 println(val2)
 ```
 
-V also supports nested maps:
+V 也支持嵌套 map：
 
 ```v
 mut m := map[string]map[string]int{}
