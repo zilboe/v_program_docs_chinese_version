@@ -1860,20 +1860,20 @@ match x.bar {
 在这种情况下，开发人员必须用 `mut` 关键字标记表达式，
 以告诉编译器他们知道自己在做什么。
 
-It works like this:
+用法示例：
 
 ```v oksyntax
 mut x := MySumType(MyStruct{123})
 if mut x is MyStruct {
-	// x is cast to MyStruct even if it's mutable
-	// without the mut keyword that wouldn't work
+	// 即使是可变的，x 也会被转换为 MyStruct
+	// 没有 mut 关键字就无法这样做
 	println(x)
 }
-// same with match
+// match 中同理
 match mut x {
 	MyStruct {
-		// x is cast to MyStruct even if it's mutable
-		// without the mut keyword that wouldn't work
+		// 即使是可变的，x 也会被转换为 MyStruct
+		// 没有 mut 关键字就无法这样做
 		println(x)
 	}
 }
@@ -1904,7 +1904,7 @@ s := match number {
 }
 ```
 
-A match statement can also to be used as an `if - else if - else` alternative:
+match 语句也可以作为 `if - else if - else` 的替代：
 
 ```v
 match true {
@@ -1913,10 +1913,10 @@ match true {
 	2 == 2 { println('else if2') }
 	else { println('else') }
 }
-// 'else if2' should be printed
+// 预期打印 'else if2'
 ```
 
-or as an `unless` alternative: [unless Ruby](https://www.tutorialspoint.com/ruby/ruby_if_else.htm)
+或作为 `unless` 的替代：[Ruby unless](https://www.tutorialspoint.com/ruby/ruby_if_else.htm)
 
 ```v
 match false {
@@ -1925,10 +1925,10 @@ match false {
 	2 == 2 { println('else if2') }
 	else { println('else') }
 }
-// 'if' should be printed
+// 预期打印 'if'
 ```
 
-A match expression returns the value of the final expression from the matching branch.
+match 表达式会返回匹配分支中最后一个表达式的值。
 
 ```v
 enum Color {
@@ -1939,15 +1939,14 @@ enum Color {
 
 fn is_red_or_blue(c Color) bool {
 	return match c {
-		.red, .blue { true } // comma can be used to test multiple values
+		.red, .blue { true } // 可以用逗号测试多个值
 		.green { false }
 	}
 }
 ```
 
-A match statement can also be used to branch on the variants of an `enum`
-by using the shorthand `.variant_here` syntax. An `else` branch is not allowed
-when all the branches are exhaustive.
+match 语句也可通过 `.variant_here` 这种简写对 `enum` 的变体进行分支。
+当分支覆盖所有变体时，不允许使用 else 分支。
 
 ```v
 c := `v`
@@ -1958,7 +1957,7 @@ typ := match c {
 	else { 'other' }
 }
 println(typ)
-// 'lowercase'
+// 预期打印 'lowercase'
 ```
 
 match 语句也可以匹配 `sumtype` 的变体类型。请注意
