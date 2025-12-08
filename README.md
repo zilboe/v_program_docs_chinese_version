@@ -1643,11 +1643,11 @@ fn main() {
 
 ### 模块导入别名
 
-Any imported module name can be aliased using the `as` keyword:
+任何已导入的模块名都可以用 `as` 关键字起别名：
 
 > [!NOTE]
-> This example will not compile unless you have created `mymod/sha256/somename.v`
-> (submodule names are determined by their path, not by the names of the .v file(s) in them).
+> 若未创建 `mymod/sha256/somename.v`，此示例将无法编译
+> （子模块名由其路径决定，而不是由其中 .v 文件的文件名决定）。
 
 ```v failcompile
 import crypto.sha256
@@ -1778,9 +1778,9 @@ println(u_name) // John
 
 #### 类型检查和转换
 
-You can check the current type of a sum type using `is` and its negated form `!is`.
+你可以使用 `is` 以及它的否定形式 `!is` 检查和判断 sum type 的当前具体类型。
 
-You can do it either in an `if`:
+可以在 `if` 中这么做：
 
 ```v cgen
 struct Abc {
@@ -1795,7 +1795,7 @@ type Alphabet = Abc | Xyz
 
 x := Alphabet(Abc{'test'}) // sum type
 if x is Abc {
-	// x is automatically cast to Abc and can be used here
+	// 这里 x 会被自动转换为 Abc，可直接使用
 	println(x)
 }
 if x !is Abc {
@@ -1803,22 +1803,22 @@ if x !is Abc {
 }
 ```
 
-or using `match`:
+或者使用 `match`：
 
 ```v oksyntax
 match x {
 	Abc {
-		// x is automatically cast to Abc and can be used here
+		// 这里 x 会被自动转换为 Abc，可直接使用
 		println(x)
 	}
 	Xyz {
-		// x is automatically cast to Xyz and can be used here
+		// 这里 x 会被自动转换为 Xyz，可直接使用
 		println(x)
 	}
 }
 ```
 
-This works also with struct fields:
+这同样适用于结构体字段：
 
 ```v
 struct MyStruct {
@@ -1836,19 +1836,19 @@ struct Abc {
 }
 
 x := Abc{
-	bar: MyStruct{123} // MyStruct will be converted to MySumType type automatically
+	bar: MyStruct{123} // MyStruct 会被自动转换为 MySumType
 }
 if x.bar is MyStruct {
-	// x.bar is automatically cast
+	// x.bar 会被自动转换
 	println(x.bar)
 } else if x.bar is MyStruct2 {
 	new_var := x.bar as MyStruct2
-	// ... or you can use `as` to create a type cast an alias manually:
+	// ... 或者使用 `as` 手动创建类型转换别名：
 	println(new_var)
 }
 match x.bar {
 	MyStruct {
-		// x.bar is automatically cast
+		// x.bar 会被自动转换
 		println(x.bar)
 	}
 	else {}
