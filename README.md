@@ -6335,7 +6335,7 @@ fn main() {
 
 #### <h4 id="comptime-variants">.variants</h4>
 
-You can read variant types from [Sum type](#sum-types).
+你可以在 [Sum type](#sum-types) 中了解变体类型。
 
 ```v
 type MySum = int | string
@@ -6350,7 +6350,7 @@ fn main() {
 	}
 }
 
-// Output:
+// 输出：
 // has int type
 // has string type
 ```
@@ -6489,23 +6489,20 @@ fn main() {
 }
 ```
 
-V can embed arbitrary files into the executable with the `$embed_file(<path>)`
-compile time call. Paths can be absolute or relative to the source file.
+ V 可以通过编译期调用 `$embed_file(<path>)` 将任意文件嵌入可执行文件。
+ 路径既可以是绝对路径，也可以是相对于源文件的相对路径。
 
-Note that by default, using `$embed_file(file)`, will always embed the whole content
-of the file, but you can modify that behaviour by passing: `-d embed_only_metadata`
-when compiling your program. In that case, the file will not be embedded. Instead,
-it will be loaded *the first time* your program calls `embedded_file.data()` at runtime,
-making it easier to change in external editor programs, without needing to recompile
-your program.
+ 注意，默认使用 `$embed_file(file)` 时，会嵌入文件的全部内容；但在编译时
+ 传入 `-d embed_only_metadata` 可以修改这一行为。在这种情况下，文件本身不会
+ 被嵌入，而是会在运行时、程序第一次调用 `embedded_file.data()` 时才被加载，
+ 这样可以在外部编辑器中修改文件而无需重新编译程序。
 
-Embedding a file inside your executable, will increase its size, but
-it will make it more self contained and thus easier to distribute.
-When that happens (the default), `embedded_file.data()` will cause *no IO*,
-and it will always return the same data.
+ 将文件嵌入可执行文件会增大体积，但会让程序更独立、易于分发。
+ 当采用默认方式嵌入时，调用 `embedded_file.data()` 不会产生 IO，
+ 且总是返回同样的数据。
 
-`$embed_file` supports compression of the embedded file when compiling with `-prod`.
-Currently only one compression type is supported: `zlib`.
+ 使用 `-prod` 编译时，`$embed_file` 支持对嵌入文件进行压缩。
+ 当前仅支持一种压缩类型：`zlib`。
 
 ```v ignore
 import os
@@ -6519,14 +6516,14 @@ fn main() {
 在某些情况下甚至可能在最终可执行文件中占用更多空间，因为它们
 已经被压缩了。
 
-`$embed_file` returns
-[EmbedFileData](https://modules.vlang.io/v.embed_file.html#EmbedFileData)
-which could be used to obtain the file contents as `string` or `[]u8`.
+`$embed_file` 返回
+[EmbedFileData](https://modules.vlang.io/v.embed_file.html#EmbedFileData)，
+可用于以 `string` 或 `[]u8` 获取文件内容。
 
 #### `$tmpl` for embedding and parsing V template files
 
-V has a simple template language for text and html templates, and they can easily
-be embedded via `$tmpl('path/to/template.txt')`:
+V 提供了用于文本和 HTML 的简易模板语言，可以通过
+`$tmpl('path/to/template.txt')` 轻松嵌入：
 
 ```v ignore
 fn build() string {
@@ -6555,7 +6552,7 @@ numbers: @numbers
 @end
 ```
 
-output:
+输出：
 
 ```
 name: Peter
@@ -6569,7 +6566,7 @@ numbers: [1, 2, 3]
 3
 ```
 
-See more [details](https://github.com/vlang/v/blob/master/vlib/v/TEMPLATES.md)
+更多信息见 [details](https://github.com/vlang/v/blob/master/vlib/v/TEMPLATES.md)
 
 #### `$env`
 
@@ -6582,22 +6579,20 @@ fn main() {
 }
 ```
 
-V can bring in values at compile time from environment variables.
-`$env('ENV_VAR')` can also be used in top-level `#flag` and `#include` statements:
-`#flag linux -I $env('JAVA_HOME')/include`.
+V 可以在编译期从环境变量中引入值。
+`$env('ENV_VAR')` 也可用于顶层的 `#flag` 与 `#include` 语句：
+`#flag linux -I $env('JAVA_HOME')/include`。
 
 #### `$d`
 
-V can bring in values at compile time from `-d ident=value` flag defines, passed on
-the command line to the compiler. You can also pass `-d ident`, which will have the
-same meaning as passing `-d ident=true`.
+V 可以在编译期从命令行传递的 `-d ident=value` 标志中获取值。
+也可以只传 `-d ident`，等价于 `-d ident=true`。
 
-To get the value in your code, use: `$d('ident', default)`, where `default`
-can be `false` for booleans, `0` or `123` for i64 numbers, `0.0` or `113.0`
-for f64 numbers, `'a string'` for strings.
+在代码中使用 `$d('ident', default)` 获取值，其中 `default` 可以是
+布尔类型的 `false`，i64 的 `0` 或 `123`，f64 的 `0.0` 或 `113.0`，
+字符串的 `'a string'`。
 
-When a flag is not provided via the command line, `$d()` will return the `default`
-value provided as the *second* argument.
+当命令行未提供该标志时，`$d()` 将返回作为第二个参数提供的 `default`。
 
 ```v
 module main
@@ -6611,19 +6606,19 @@ fn main() {
 }
 ```
 
-Running the above with `v run .` will output:
+使用 `v run .` 运行上面的示例输出：
 ```
 V
 1024
 ```
 
-Running the above with `v -d my_i64=4096 -d my_string="V rocks" run .` will output:
+使用 `v -d my_i64=4096 -d my_string="V rocks" run .` 运行则输出：
 ```
 V rocks
 4096
 ```
 
-Here is an example of how to use the default values, which have to be *pure* literals:
+下面示例演示如何使用必须为*纯*字面量的默认值：
 ```v
 fn main() {
 	val_str := $d('id_str', 'value') // can be changed by providing `-d id_str="my id"`
@@ -6639,20 +6634,18 @@ fn main() {
 }
 ```
 
-`$d('ident','value')` can also be used in top-level statements like `#flag` and `#include`:
-`#flag linux -I $d('my_include','/usr')/include`. The default value for `$d` when used in these
-statements should be literal `string`s.
+`$d('ident','value')` 也可用于顶层语句，如 `#flag` 与 `#include`：
+`#flag linux -I $d('my_include','/usr')/include`。在这些语句中使用 `$d`
+时，默认值应为字符串字面量。
 
-`$d('ident', false)` can also be used inside `$if $d('ident', false) {` statements,
-granting you the ability to selectively turn on/off certain sections of code, at compile
-time, without modifying your source code, or keeping different versions of it.
+`$d('ident', false)` 也可用于 `$if $d('ident', false) {` 语句中，
+让你在编译期选择性地启用/禁用代码片段，而无需修改源码或维护多个版本。
 
 #### `$compile_error` and `$compile_warn`
 
-These two comptime functions are very useful for displaying custom errors/warnings during
-compile time.
+这两个编译期函数可用于在编译时显示自定义错误/警告。
 
-Both receive as their only argument a string literal that contains the message to display:
+它们都接收唯一参数：包含要显示信息的字符串字面量：
 
 ```v failcompile nofmt
 // x.v
@@ -6772,8 +6765,7 @@ See also [Cross Compilation](#cross-compilation).
 
 ## 调试器
 
-To use the native *V debugger*, add the `$dbg` statement to your source, where you
-want the debugger to be invoked.
+要使用原生 *V 调试器*，在希望触发调试器的位置添加 `$dbg` 语句。
 
 ```v
 fn main() {
@@ -6782,8 +6774,7 @@ fn main() {
 }
 ```
 
-Running this V code, you will get the debugger REPL break when the execution
-reaches the `$dbg` statement.
+运行该 V 代码，当执行到 `$dbg` 语句时会进入调试器 REPL 断点。
 
 ```
 $ v run example.v
@@ -6798,22 +6789,22 @@ example.v:3 vdbg>
 
 ```
 example.v:3 vdbg> ?
-vdbg commands:
-  anon?                 check if the current context is anon
-  bt                    prints a backtrace
-  c, continue           continue debugging
-  generic?              check if the current context is generic
-  heap                  show heap memory usage
-  h, help, ?            show this help
-  l, list [lines]       show some lines from current break (default: 3)
-  mem, memory           show memory usage
-  method?               check if the current context is a method
-  m, mod                show current module name
-  p, print <var>        prints an variable
-  q, quit               exits debugging session in the code
-  scope                 show the vars in the current scope
-  u, unwatch <var>      unwatches a variable
-  w, watch <var>        watches a variable
+vdbg 命令：
+  anon?                 检查当前上下文是否为匿名
+  bt                    打印回溯
+  c, continue           继续调试
+  generic?              检查当前上下文是否为泛型
+  heap                  显示堆内存使用
+  h, help, ?            显示帮助
+  l, list [lines]       显示当前断点附近若干行（默认 3 行）
+  mem, memory           显示内存使用
+  method?               检查当前上下文是否为方法
+  m, mod                显示当前模块名
+  p, print <var>        打印变量
+  q, quit               退出调试会话
+  scope                 显示当前作用域的变量
+  u, unwatch <var>      取消监视变量
+  w, watch <var>        监视变量
 ```
 
 让我们尝试 `scope` 命令，以检查当前作用域上下文。
@@ -6825,17 +6816,17 @@ a = 1 (int)
 
 太好了！我们有变量名、它的值和它的类型名。
 
-What about printing only a variable, not the whole scope?
+如果只想打印某个变量而不是整个作用域怎么办？
 
-Just type `p a`.
+直接输入 `p a`。
 
-To watch a variable by its name, use:
+按名称监视变量：
 
-`w a` (where `a` is the variable name)
+`w a`（其中 `a` 是变量名）
 
-To stop watching the variable (`unwatch` it), use `u a`.
+停止监视（取消监视）变量则用 `u a`。
 
-Lets see more one example:
+再看一个例子：
 
 ```
 fn main() {
@@ -6845,7 +6836,7 @@ fn main() {
 }
 ```
 
-Running again, we'll get:
+再次运行将得到：
 `Break on [main] main in example.v:3`
 
 如果我们想读取源代码上下文，可以使用 `l` 或 `list` 命令。
@@ -6859,8 +6850,7 @@ example.v:3 vdbg> l
 0005  }
 ```
 
-The default is read 3 lines before and 3 lines after, but you can
-pass a parameter to the command to read more lines, like `l 5`.
+默认会读取前后各 3 行，但你可以给命令传参读取更多行，比如 `l 5`。
 
 现在，让我们观察这个循环中变量的变化。
 
@@ -6877,10 +6867,9 @@ Break on [main] main in example.v:3
 i = 1 (int)
 ```
 
-`i` and it's value is automatically printed, because it is in the watch list.
+`i` 及其值会被自动打印，因为它在监视列表中。
 
-To repeat the last command issued, in this case the `c` command,
-just hit the *enter* key.
+要重复上一条命令（此处为 `c`），只需按 *enter*。
 
 ```
 example.v:3 vdbg>
@@ -6892,16 +6881,14 @@ i = 3 (int)
 example.v:3 vdbg>
 ```
 
-You can also see memory usage with `mem` or `memory` command, and
-check if the current context is an anon function (`anon?`), a method (`method?`)
-or a generic method (`generic?`) and clear the terminal window (`clear`).
+你还可以用 `mem` 或 `memory` 查看内存使用情况，检查当前上下文是否为匿名函数
+（`anon?`）、方法（`method?`）或泛型方法（`generic?`），以及清空终端窗口（`clear`）。
 
 ## 调用栈
 
-You can also show the current call stack with `v.debug`.
+你还可以通过 `v.debug` 显示当前调用栈。
 
-To enable this feature, add the `-d callstack` switch when building or running
-your code:
+启用该特性时，在构建或运行代码时添加 `-d callstack`：
 
 ```v
 import v.debug
@@ -6935,11 +6922,9 @@ example.v:5    |   > main.test
 
 ## 跟踪
 
-Another feature of `v.debug` is the possibility to add hook functions
-before and after each function call.
+`v.debug` 还可以在每次函数调用前后添加钩子函数。
 
-To enable this feature, add the `-d trace` switch when building or running
-your code:
+启用该特性时，在构建或运行代码时添加 `-d trace`：
 
 ```v
 import v.debug
@@ -6956,7 +6941,7 @@ fn main() {
 	}
 	anon()
 
-	// optionally you can remove the hooks:
+	// 如有需要，可移除钩子：
 	debug.remove_before_call(hook1)
 	debug.remove_after_call(hook2)
 	anon()
@@ -6973,59 +6958,50 @@ call
 
 ## 内存不安全代码
 
-Sometimes for efficiency you may want to write low-level code that can potentially
-corrupt memory or be vulnerable to security exploits. V supports writing such code,
-but not by default.
+在某些情况下，为了效率你可能会写一些潜在破坏内存或存在安全隐患的底层代码。
+V 支持编写此类代码，但默认不会启用。
 
-V requires that any potentially memory-unsafe operations are marked intentionally.
-Marking them also indicates to anyone reading the code that there could be
-memory-safety violations if there was a mistake.
+V 要求任何潜在的不安全内存操作都需要显式标记。这也提醒阅读代码的人，如果有错误，
+可能会出现内存安全问题。
 
-Examples of potentially memory-unsafe operations are:
+潜在不安全的操作示例：
 
-* Pointer arithmetic
-* Pointer indexing
-* Conversion to pointer from an incompatible type
-* Calling certain C functions, e.g. `free`, `strlen` and `strncmp`.
+* 指针运算
+* 指针索引
+* 从不兼容类型转换为指针
+* 调用某些 C 函数，例如 `free`、`strlen`、`strncmp`
 
-To mark potentially memory-unsafe operations, enclose them in an `unsafe` block:
+要标记这些潜在的不安全操作，请将它们包裹在 `unsafe` 块中：
 
 ```v wip
-// allocate 2 uninitialized bytes & return a reference to them
+// 分配 2 个未初始化的字节并返回其引用
 mut p := unsafe { malloc(2) }
-p[0] = `h` // Error: pointer indexing is only allowed in `unsafe` blocks
+p[0] = `h` // 错误：指针索引仅允许在 `unsafe` 块中
 unsafe {
     p[0] = `h` // OK
     p[1] = `i`
 }
-p++ // Error: pointer arithmetic is only allowed in `unsafe` blocks
+p++ // 错误：指针运算仅允许在 `unsafe` 块中
 unsafe {
     p++ // OK
 }
 assert *p == `i`
 ```
 
-Best practice is to avoid putting memory-safe expressions inside an `unsafe` block,
-so that the reason for using `unsafe` is as clear as possible. Generally any code
-you think is memory-safe should not be inside an `unsafe` block, so the compiler
-can verify it.
+最佳实践是避免将内存安全的表达式放进 `unsafe` 块，这样使用 `unsafe` 的原因会更清晰。
+一般来说，你认为内存安全的代码不应放在 `unsafe` 块中，这样编译器才能检查它。
 
-If you suspect your program does violate memory-safety, you have a head start on
-finding the cause: look at the `unsafe` blocks (and how they interact with
-surrounding code).
+如果怀疑程序违反了内存安全，首先查看 `unsafe` 块以及它与周围代码的交互。
 
 > [!NOTE]
-> This is work in progress.
+> 此功能仍在进行中。
 
 ## 带引用字段的结构体
 
-Structs with references require explicitly setting the initial value to a
-reference value unless the struct already defines its own initial value.
+带引用字段的结构体需要显式为引用字段设置初始值，除非结构体自身定义了初始值。
 
-Zero-value references, or nil pointers, will **NOT** be supported in the future,
-for now data structures such as Linked Lists or Binary Trees that rely on reference
-fields that can use the value `0`, understanding that it is unsafe, and that it can
-cause a panic.
+零值引用或 nil 指针未来将**不会**被支持；目前依赖引用字段且使用值 `0` 的数据结构
+（如链表、二叉树）被视为不安全，可能导致 panic。
 
 ```v
 struct Node {
@@ -7033,8 +7009,8 @@ struct Node {
 	b &Node = unsafe { nil } // Auto-initialized to nil, use with caution!
 }
 
-// Reference fields must be initialized unless an initial value is declared.
-// Nil is OK but use with caution, it's a nil pointer.
+// 引用字段必须初始化，除非声明了初始值。
+// Nil 可以，但要谨慎使用，它是空指针。
 foo := Node{
 	a: unsafe { nil }
 }
@@ -7104,23 +7080,21 @@ fn main() {
 }
 ```
 
-> Operator overloading goes against V's philosophy of simplicity and predictability.
-> But since scientific and graphical applications are among V's domains,
-> operator overloading is an important feature to have in order to improve readability:
+> 运算符重载有悖于 V 的简洁与可预测哲学。
+> 但科学和图形等领域需要它来提升可读性：
 >
-> `a.add(b).add(c.mul(d))` is a lot less readable than `a + b + c * d`.
+> 与 `a + b + c * d` 相比，`a.add(b).add(c.mul(d))` 的可读性更差。
 
-Operator overloading is possible for the following binary operators: `+, -, *, /, %, <, ==`.
+以下二元运算符可以进行重载：`+, -, *, /, %, <, ==`。
 
 ### 隐式生成的重载
 
-- `==` is automatically generated by the compiler, but can be overridden.
+- 编译器会自动生成 `==`，但可以被覆盖。
 
-- `!=`, `>`, `<=` and `>=` are automatically generated when `==` and `<` are defined.
-  They cannot be explicitly overridden.
-- Assignment operators (`*=`, `+=`, `/=`, etc) are automatically generated when the corresponding
-  operators are defined and the operands are of the same type.
-  They cannot be explicitly overridden.
+- 当定义了 `==` 和 `<` 时，会自动生成 `!=`、`>`、`<=`、`>=`，
+  这些运算符不能显式覆盖。
+- 当对应运算符已定义且操作数类型相同时，会自动生成赋值运算符
+  （`*=`、`+=`、`/=` 等），它们也不能显式覆盖。
 
 ### 限制
 
@@ -7128,27 +7102,23 @@ Operator overloading is possible for the following binary operators: `+, -, *, /
 
 #### 类型限制
 
-- When overriding `<` and `==`, the return type must be strictly `bool`.
-- Both arguments must have the same type (just like with all operators in V).
-- Overloaded operators have to return the same type as the argument
-  (the exceptions are `<` and `==`).
+- 重载 `<` 和 `==` 时，返回类型必须严格为 `bool`。
+- 两个参数类型必须相同（V 中所有运算符都如此）。
+- 重载的运算符必须返回与参数相同的类型（`<` 和 `==` 除外）。
 
 #### 其他限制
 
-- Arguments cannot be changed inside overloads.
-- Calling other functions inside operator functions is not allowed (**planned**).
+- 重载函数内部不允许修改参数。
+- 运算符函数内部不允许调用其他函数（**计划限制**）。
 
 ## 性能调优
 
-When compiled with `-prod`, V's generated C code usually performs well. However, in specialized
-scenarios, additional compiler flags and attributes can further optimize the executable for
-performance, memory usage, or size.
+使用 `-prod` 编译时，V 生成的 C 代码通常性能不错。但在特殊场景下，可用额外的
+编译器标志与属性进一步优化可执行文件的性能、内存或体积。
 
 > [!NOTE]
-> These are *rarely* needed, and should not be used unless you
-> *profile your code*, and then see that there are significant benefits for them.
-> To cite GCC's documentation: "Programmers are notoriously bad at predicting
-> how their programs actually perform".
+> 这些选项*很少*需要，除非先*对代码做性能分析*，并确认它们带来显著收益。
+> 引用 GCC 文档：程序员往往难以准确预测自己程序的实际表现。
 
 | Tuning Operation         | Benefits                        | Drawbacks                                         |
 |--------------------------|---------------------------------|---------------------------------------------------|
